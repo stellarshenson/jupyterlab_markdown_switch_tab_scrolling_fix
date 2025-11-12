@@ -1,80 +1,37 @@
-# Making a new release of jupyterlab_markdown_switch_tab_scrolling_fix
+# Release Process
 
-The extension can be published to `PyPI` and `npm` manually or using the [Jupyter Releaser](https://github.com/jupyter-server/jupyter_releaser).
+This project uses `make publish` for releases, which handles version increment, build, and publishing to both npm and PyPI.
 
-## Manual release
-
-### Python package
-
-This extension can be distributed as Python packages. All of the Python
-packaging instructions are in the `pyproject.toml` file to wrap your extension in a
-Python package. Before generating a package, you first need to install some tools:
+## Quick Release
 
 ```bash
-pip install build twine hatch
+make publish
 ```
 
-Bump the version using `hatch`. By default this will create a tag.
-See the docs on [hatch-nodejs-version](https://github.com/agoose77/hatch-nodejs-version#semver) for details.
+This will:
+- Increment patch version in `package.json`
+- Build TypeScript and Python packages
+- Publish to npm registry
+- Publish to PyPI via twine
+
+## Manual Steps
+
+If you need more control over versioning:
 
 ```bash
-hatch version <new-version>
-```
-
-Make sure to clean up all the development files before building the package:
-
-```bash
-jlpm clean:all
-```
-
-You could also clean up the local git repository:
-
-```bash
-git clean -dfX
-```
-
-To create a Python source package (`.tar.gz`) and the binary package (`.whl`) in the `dist/` directory, do:
-
-```bash
-python -m build
-```
-
-> `python setup.py sdist bdist_wheel` is deprecated and will not work for this package.
-
-Then to upload the package to PyPI, do:
-
-```bash
+# Edit version in package.json manually
+# Then build and publish
+make build
+npm publish --access public
 twine upload dist/*
 ```
 
-### NPM package
+## Tagging
 
-To publish the frontend part of the extension as a NPM package, do:
+After successful publish, tag the release:
 
 ```bash
-npm login
-npm publish --access public
+git tag STABLE_<version>
+git tag RELEASE_<version>
+git push origin STABLE_<version> RELEASE_<version>
 ```
-
-## Automated releases with the Jupyter Releaser
-
-The extension repository should already be compatible with the Jupyter Releaser. But
-the GitHub repository and the package managers need to be properly set up. Please
-follow the instructions of the Jupyter Releaser [checklist](https://jupyter-releaser.readthedocs.io/en/latest/how_to_guides/convert_repo_from_repo.html).
-
-Here is a summary of the steps to cut a new release:
-
-- Go to the Actions panel
-- Run the "Step 1: Prep Release" workflow
-- Check the draft changelog
-- Run the "Step 2: Publish Release" workflow
-
-> [!NOTE]
-> Check out the [workflow documentation](https://jupyter-releaser.readthedocs.io/en/latest/get_started/making_release_from_repo.html)
-> for more information.
-
-## Publishing to `conda-forge`
-
-If the package is not on conda forge yet, check the documentation to learn how to add it: https://conda-forge.org/docs/maintainer/adding_pkgs.html
-
-Otherwise a bot should pick up the new version publish to PyPI, and open a new PR on the feedstock repository automatically.
