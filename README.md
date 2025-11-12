@@ -1,8 +1,40 @@
 # jupyterlab_markdown_switch_tab_scrolling_fix
 
-[![Github Actions Status](/workflows/Build/badge.svg)](/actions/workflows/build.yml)
+[![GitHub Actions](https://github.com/stellarshenson/jupyterlab_markdown_switch_tab_scrolling_fix/actions/workflows/build.yml/badge.svg)](https://github.com/stellarshenson/jupyterlab_markdown_switch_tab_scrolling_fix/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/jupyterlab_markdown_switch_tab_scrolling_fix.svg)](https://www.npmjs.com/package/jupyterlab_markdown_switch_tab_scrolling_fix)
+[![PyPI version](https://img.shields.io/pypi/v/jupyterlab-markdown-switch-tab-scrolling-fix.svg)](https://pypi.org/project/jupyterlab-markdown-switch-tab-scrolling-fix/)
+[![Total PyPI downloads](https://static.pepy.tech/badge/jupyterlab-markdown-switch-tab-scrolling-fix)](https://pepy.tech/project/jupyterlab-markdown-switch-tab-scrolling-fix)
+[![JupyterLab 4](https://img.shields.io/badge/JupyterLab-4-orange.svg)](https://jupyterlab.readthedocs.io/en/stable/)
 
-Jupyterlab bugfix (disguised as extension) to help with the problem of Markdown files getting scrolled uncontrollably when images are gettng loaded into the view when switching tab back and forth
+JupyterLab extension that prevents markdown files from scrolling uncontrollably when switching tabs while images load.
+
+## The Problem
+
+When you switch back to a markdown tab in JupyterLab, images reload and cause the viewport to jump as they render. This creates disorienting scroll drift that moves you away from where you were reading.
+
+**Key observations**:
+- Issue only occurs with markdown files containing images
+- Triggered by tab switching (deactivate then reactivate)
+- Browser recalculates layout as each image loads, causing cumulative scroll displacement
+- Native JupyterLab has no scroll position protection during image rendering
+
+## The Fix
+
+This extension locks scroll position when you switch to a markdown tab until all images finish loading.
+
+**How it works**:
+- Detects when markdown widgets become active via JupyterLab's shell signals
+- Captures initial scroll position immediately on tab activation
+- Monitors all image load events in the markdown
+- Actively corrects any scroll drift (checks every 100ms)
+- Releases lock after all images load and position stabilizes for 300ms
+- User scroll (wheel or touch) immediately overrides the lock
+
+**Implementation details**:
+- Maximum lock duration: 3 seconds
+- Handles cached images that load instantly
+- Uses WeakMap to prevent multiple guards on same widget
+- Passive event listeners for performance
 
 ## Requirements
 
