@@ -38,13 +38,17 @@ This extension locks scroll position when you switch to a markdown tab until all
 
 ## Technical Implementation
 
-The extension hooks into JupyterLab's shell lifecycle using the `ILabShell.currentChanged` signal to detect tab switches. When a markdown widget activates, it captures the scroll position, attaches load event listeners to all images, and runs a guard interval that corrects drift every 100ms until images finish loading and position stabilizes.
+The extension hooks into JupyterLab's shell lifecycle using the `ILabShell.currentChanged` signal to detect tab switches. When a markdown widget activates, the handler searches for `.jp-RenderedMarkdown` containers and queries all image elements. It captures the initial scroll position (`scrollTop`/`scrollLeft`), then attaches load event listeners to track completion of image rendering.
+
+A guard interval runs every 100ms, comparing current scroll position against the saved position. Any drift exceeding 1 pixel triggers immediate correction by resetting `scrollTop`/`scrollLeft`. The guard tracks stability (position unchanged for 300ms) and image load completion. Once all images finish loading and position remains stable, the guard releases. User scroll events (wheel or touchstart) immediately abort the guard to preserve manual navigation.
 
 **Core components**:
-- Signal handler on `labShell.currentChanged` for tab activation detection
-- Image load tracking via `addEventListener('load')` with `once: true` option
-- Guard interval using `window.setInterval()` for drift correction
-- WeakMap storage prevents duplicate guards on widget reactivation
+- `ILabShell.currentChanged` signal handler detects widget activation
+- DOM query selects `.jp-RenderedMarkdown img` elements for monitoring
+- `addEventListener('load', handler, { once: true })` tracks image completion
+- `window.setInterval()` guard runs drift correction every 100ms
+- WeakMap associates guard interval IDs with widget instances
+- Passive event listeners detect user scroll intent without blocking
 
 ## Requirements
 
