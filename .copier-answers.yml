@@ -1,0 +1,17 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.5.0
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: konrad.jelen@gmail.com
+author_name: Stellars Henson
+has_ai_rules: false
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: jupyterlab_markdown_switch_tab_scrolling_fix
+project_short_description: Jupyterlab bugfix (disguised as extension) to help with
+    the problem of Markdown files getting scrolled uncontrollably when images are
+    gettng loaded into the view when switching tab back and forth
+python_name: jupyterlab_markdown_switch_tab_scrolling_fix
+repository: ''
+test: true
+
