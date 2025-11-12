@@ -36,6 +36,16 @@ This extension locks scroll position when you switch to a markdown tab until all
 - Uses WeakMap to prevent multiple guards on same widget
 - Passive event listeners for performance
 
+## Technical Implementation
+
+The extension hooks into JupyterLab's shell lifecycle using the `ILabShell.currentChanged` signal to detect tab switches. When a markdown widget activates, it captures the scroll position, attaches load event listeners to all images, and runs a guard interval that corrects drift every 100ms until images finish loading and position stabilizes.
+
+**Core components**:
+- Signal handler on `labShell.currentChanged` for tab activation detection
+- Image load tracking via `addEventListener('load')` with `once: true` option
+- Guard interval using `window.setInterval()` for drift correction
+- WeakMap storage prevents duplicate guards on widget reactivation
+
 ## Requirements
 
 - JupyterLab >= 4.0.0
