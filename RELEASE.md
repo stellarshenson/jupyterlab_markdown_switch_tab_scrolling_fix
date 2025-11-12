@@ -1,37 +1,24 @@
-# Release Process
+# Release Notes
 
-This project uses `make publish` for releases, which handles version increment, build, and publishing to both npm and PyPI.
+## Version 1.0.4
 
-## Quick Release
+Initial public release of JupyterLab extension that fixes markdown file scrolling issues when switching tabs.
 
-```bash
-make publish
-```
+**Features**:
+- Scroll lock mechanism prevents uncontrolled viewport jumping when switching to markdown tabs with images
+- Automatic detection of tab activation via ILabShell.currentChanged signal
+- Image load event tracking ensures all images finish rendering before releasing scroll lock
+- User scroll override - wheel and touch events immediately abort lock to preserve manual navigation
+- Drift correction runs every 100ms with 1px threshold and 300ms stability requirement
+- WeakMap-based guard management prevents duplicate locks on widget reactivation
 
-This will:
-- Increment patch version in `package.json`
-- Build TypeScript and Python packages
-- Publish to npm registry
-- Publish to PyPI via twine
+**Technical Implementation**:
+- TypeScript extension for JupyterLab 4.0+
+- Hooks into Lumino widget lifecycle
+- Passive event listeners for performance
+- Maximum guard duration of 3 seconds
 
-## Manual Steps
-
-If you need more control over versioning:
-
-```bash
-# Edit version in package.json manually
-# Then build and publish
-make build
-npm publish --access public
-twine upload dist/*
-```
-
-## Tagging
-
-After successful publish, tag the release:
-
-```bash
-git tag STABLE_<version>
-git tag RELEASE_<version>
-git push origin STABLE_<version> RELEASE_<version>
-```
+**Documentation**:
+- Comprehensive README with problem statement and solution explanation
+- Technical implementation details with API specifics
+- GitHub Actions workflow with link checker configuration
