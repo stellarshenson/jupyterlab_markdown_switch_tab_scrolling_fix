@@ -8,6 +8,9 @@
 
 JupyterLab extension that prevents markdown files from scrolling uncontrollably when switching tabs while images load.
 
+> [!WARNING]
+> This extension is a temporary fix and will be deprecated once JupyterLab core implements proper icon scaling. We plan to submit a PR to the main JupyterLab repository to address this issue natively. Once accepted and released, this extension will no longer be necessary.
+
 ## The Problem
 
 When you switch back to a markdown tab in JupyterLab, images reload and cause the viewport to jump as they render. This creates disorienting scroll drift that moves you away from where you were reading.
