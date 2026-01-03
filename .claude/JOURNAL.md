@@ -18,3 +18,6 @@ This journal tracks substantive work on documents, diagrams, and documentation c
 
 5. **Task - Clean up debug logging** (v1.0.5): Commented out debug console.log statements and added extension prefix for future maintenance<br>
     **Result**: Added `DEBUG_PREFIX = '[md-scroll-fix]'` constant and prefixed all debug statements. All console.log calls remain commented out but identifiable when re-enabled. Added `check_release` job to build.yml with `RH_SINCE_LAST_STABLE` and `steps_to_skip: "build-changelog"` per JUPYTERLAB_EXTENSION.md guidance
+
+6. **Task - Publish v1.0.6** (v1.0.6): Published new version with CI fixes and debug cleanup<br>
+    **Result**: Added jupyter-releaser markers to CHANGELOG.md, fixed integration test to check for load errors instead of commented-out console message, published to npm and PyPI

@@ -1,6 +1,6 @@
 {
     "name": "jupyterlab_markdown_switch_tab_scrolling_fix",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Jupyterlab bugfix (disguised as extension) to help with the problem of Markdown files getting scrolled uncontrollably when images are gettng loaded into the view when switching tab back and forth",
     "keywords": [
         "jupyter",
