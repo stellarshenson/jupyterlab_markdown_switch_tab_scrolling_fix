@@ -6,6 +6,9 @@ import {
 
 import { Widget } from '@lumino/widgets';
 
+// Debug logging prefix for this extension
+const DEBUG_PREFIX = '[md-scroll-fix]';
+
 /**
  * Initialization data for the jupyterlab_markdown_switch_tab_scrolling_fix extension.
  */
@@ -16,9 +19,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   requires: [ILabShell],
   activate: (app: JupyterFrontEnd, labShell: ILabShell) => {
-    console.log(
-      'JupyterLab extension jupyterlab_markdown_switch_tab_scrolling_fix is activated!'
-    );
+    // console.log(
+    //   `${DEBUG_PREFIX} Extension activated`
+    // );
 
     // Track active guard intervals to prevent multiple guards on same widget
     const activeGuards = new WeakMap<Widget, number>();
@@ -61,9 +64,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
         return;
       }
 
-      console.log(
-        `[SCROLL-LOCK] Markdown activated with ${images.length} images, locking scroll at ${savedScrollTop}px`
-      );
+      // console.log(
+      //   `${DEBUG_PREFIX} [SCROLL-LOCK] Markdown activated with ${images.length} images, locking scroll at ${savedScrollTop}px`
+      // );
 
       // Track image loading state
       let loadedImageCount = 0;
@@ -74,13 +77,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
       const imageLoadHandler = (index: number) => {
         return () => {
           loadedImageCount++;
-          console.log(`[IMAGE-LOAD] Image ${index + 1}/${totalImages} loaded`);
+          // console.log(`${DEBUG_PREFIX} [IMAGE-LOAD] Image ${index + 1}/${totalImages} loaded`);
 
-          if (loadedImageCount >= totalImages) {
-            console.log(
-              `[IMAGES-COMPLETE] All ${totalImages} images loaded, scroll lock will release soon`
-            );
-          }
+          // if (loadedImageCount >= totalImages) {
+          //   console.log(
+          //     `${DEBUG_PREFIX} [IMAGES-COMPLETE] All ${totalImages} images loaded, scroll lock will release soon`
+          //   );
+          // }
         };
       };
 
@@ -99,7 +102,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       // Detect user-initiated scrolling to release lock immediately
       const userScrollHandler = () => {
         userScrollDetected = true;
-        console.log('[USER-SCROLL] User scroll detected, releasing lock');
+        // console.log(`${DEBUG_PREFIX} [USER-SCROLL] User scroll detected, releasing lock`);
       };
 
       markdownContainer.addEventListener('wheel', userScrollHandler, {
@@ -127,7 +130,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'touchstart',
             userScrollHandler
           );
-          console.log('[GUARD-EXIT] User scroll detected');
+          // console.log(`${DEBUG_PREFIX} [GUARD-EXIT] User scroll detected`);
           return;
         }
 
@@ -142,9 +145,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
           // Restore scroll position if drift detected
           markdownContainer.scrollTop = savedScrollTop;
           markdownContainer.scrollLeft = savedScrollLeft;
-          console.log(
-            `[SCROLL-RESTORE] Corrected drift of ${drift.toFixed(1)}px`
-          );
+          // console.log(
+          //   `${DEBUG_PREFIX} [SCROLL-RESTORE] Corrected drift of ${drift.toFixed(1)}px`
+          // );
         }
 
         // Exit if all images loaded and position is stable
@@ -159,9 +162,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'touchstart',
             userScrollHandler
           );
-          console.log(
-            `[GUARD-COMPLETE] Scroll lock released after ${guardAttempts} attempts`
-          );
+          // console.log(
+          //   `${DEBUG_PREFIX} [GUARD-COMPLETE] Scroll lock released after ${guardAttempts} attempts`
+          // );
           return;
         }
 
@@ -176,9 +179,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'touchstart',
             userScrollHandler
           );
-          console.log(
-            `[GUARD-TIMEOUT] Scroll lock released after timeout (${loadedImageCount}/${totalImages} images loaded)`
-          );
+          // console.log(
+          //   `${DEBUG_PREFIX} [GUARD-TIMEOUT] Scroll lock released after timeout (${loadedImageCount}/${totalImages} images loaded)`
+          // );
         }
       }, 100);
 
@@ -192,9 +195,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
       handleWidgetActivation(newValue);
     });
 
-    console.log(
-      '[INIT] Markdown scroll lock handler registered on shell.currentChanged'
-    );
+    // console.log(
+    //   `${DEBUG_PREFIX} [INIT] Scroll lock handler registered on shell.currentChanged`
+    // );
   }
 };
 
