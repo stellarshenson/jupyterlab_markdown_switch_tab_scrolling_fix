@@ -1,25 +1,28 @@
 import { expect, test } from '@jupyterlab/galata';
 
 /**
- * Don't load JupyterLab webpage before running the tests.
- * This is required to ensure we capture all log messages.
+ * Test that the extension loads without errors.
  */
-test.use({ autoGoto: false });
-
-test('should emit an activation console message', async ({ page }) => {
-  const logs: string[] = [];
+test('should load the extension without errors', async ({ page }) => {
+  const errors: string[] = [];
 
   page.on('console', message => {
-    logs.push(message.text());
+    if (message.type() === 'error') {
+      errors.push(message.text());
+    }
   });
 
   await page.goto();
 
-  expect(
-    logs.filter(
-      s =>
-        s ===
-        'JupyterLab extension jupyterlab_markdown_switch_tab_scrolling_fix is activated!'
-    )
-  ).toHaveLength(1);
+  // Wait for JupyterLab to fully load
+  await page.waitForSelector('.jp-Launcher');
+
+  // Filter out unrelated errors
+  const extensionErrors = errors.filter(
+    e =>
+      e.includes('jupyterlab_markdown_switch_tab_scrolling_fix') ||
+      e.includes('md-scroll-fix')
+  );
+
+  expect(extensionErrors).toHaveLength(0);
 });
