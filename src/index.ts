@@ -7,7 +7,7 @@ import {
 import { Widget } from '@lumino/widgets';
 
 // Debug logging prefix for this extension
-const DEBUG_PREFIX = '[md-scroll-fix]';
+// const DEBUG_PREFIX = '[md-scroll-fix]';
 
 /**
  * Initialization data for the jupyterlab_markdown_switch_tab_scrolling_fix extension.
