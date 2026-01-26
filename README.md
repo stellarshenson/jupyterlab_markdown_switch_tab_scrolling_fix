@@ -6,6 +6,9 @@
 [![Total PyPI downloads](https://static.pepy.tech/badge/jupyterlab-markdown-switch-tab-scrolling-fix)](https://pepy.tech/project/jupyterlab-markdown-switch-tab-scrolling-fix)
 [![JupyterLab 4](https://img.shields.io/badge/JupyterLab-4-orange.svg)](https://jupyterlab.readthedocs.io/en/stable/)
 
+> [!TIP]
+> This fix is part of the [stellars_jupyterlab_fixes](https://github.com/stellarshenson/stellars_jupyterlab_fixes) metapackage. Install all Stellars fixes at once: `pip install stellars_jupyterlab_fixes`
+
 JupyterLab extension that prevents markdown files from scrolling uncontrollably when switching tabs while images load.
 
 > [!WARNING]
